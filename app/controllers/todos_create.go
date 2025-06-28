@@ -3,6 +3,7 @@ package controllers
 import (
 	"learning/app/models"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -28,6 +29,8 @@ func createTodoParams(todo Todo) models.CreateTodoParams {
 	return models.CreateTodoParams{
 		Title:       todo.Title,
 		Description: pgtype.Text{String: todo.Description, Valid: true},
+		CreatedAt:   pgtype.Timestamp{Time: time.Now().UTC(), Valid: true},
+		UpdatedAt:   pgtype.Timestamp{Time: time.Now().UTC(), Valid: true},
 	}
 }
 
@@ -36,6 +39,7 @@ func todoResponse(todo models.Todo) Todo {
 		ID:          int(todo.ID),
 		Title:       todo.Title,
 		Description: todo.Description.String,
+		Completed:   &todo.Completed.Bool,
 		CreatedAt:   todo.CreatedAt.Time.Format("2006-01-02 15:04:05"),
 		UpdatedAt:   todo.UpdatedAt.Time.Format("2006-01-02 15:04:05"),
 	}
