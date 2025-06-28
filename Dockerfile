@@ -17,8 +17,10 @@ FROM golang:1.23.4-alpine3.21
 WORKDIR /app
 
 # Copy required files
-COPY --from=builder /app/main .
+COPY ./config/credentials.yml.enc config/credentials.yml.enc
 COPY ./start.sh /app/start.sh
+
+COPY --from=builder /app/main .
 
 ENV GIN_MODE=release
 ENV TZ=Asia/Bangkok
