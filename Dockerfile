@@ -22,6 +22,6 @@ COPY ./start.sh /app/start.sh
 
 ENV GIN_MODE=release
 ENV TZ=Asia/Bangkok
-EXPOSE 8080
+EXPOSE 3000
 CMD ["/app/main"]
 ENTRYPOINT [ "/app/start.sh" ]

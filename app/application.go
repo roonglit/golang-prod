@@ -1,13 +1,24 @@
 package app
 
-import "learning/app/controllers"
+import (
+	"learning/app/controllers"
+	"learning/config"
+
+	"github.com/gin-gonic/gin"
+	"github.com/roonglit/credentials/pkg/credentials"
+)
 
 type Application struct {
 	Server *controllers.Server
 }
 
 func New() *Application {
-	server := controllers.New()
+	config := loadConfig()
+
+	server := controllers.New(
+		config,
+	)
+
 	return &Application{
 		Server: server,
 	}
@@ -15,4 +26,14 @@ func New() *Application {
 
 func (app *Application) Run() {
 	app.Server.Run()
+}
+
+func loadConfig() *config.Config {
+	reader := credentials.NewConfigReader()
+
+	var config config.Config
+	if err := reader.Read(gin.Mode(), &config); err != nil {
+		panic("failed to load config: " + err.Error())
+	}
+	return &config
 }
